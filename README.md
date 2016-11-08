@@ -56,7 +56,7 @@ converted to one. **Returns** a `String` that is the index for this feature.
 **Returns** a `Promise` or calls a `callback` if specified with the result
 `Array` of indexes.
 
-#### test
+## test
 
 ```
 $ npm test
