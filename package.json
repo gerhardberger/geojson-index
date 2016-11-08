@@ -1,7 +1,7 @@
 {
   "name": "geojson-index",
   "version": "1.0.0",
-  "description": "create indexes from geojson features",
+  "description": "create indexes from geojson features and query them",
   "main": "index.js",
   "scripts": {
     "test": "ava"

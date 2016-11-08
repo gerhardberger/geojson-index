@@ -1,5 +1,7 @@
 # geojson-index
 
+[![Build Status](https://travis-ci.org/gerhardberger/geojson-index.svg?branch=master)](https://travis-ci.org/gerhardberger/geojson-index) [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+
 Create index a GeoJSON object's feature and for a query based on a GeoJSON
 object's feature. Currently only `Point` type supported.
 
