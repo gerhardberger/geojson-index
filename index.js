@@ -55,7 +55,8 @@ function cover ({ data, radius = 1000 }, callback) {
         return reject(err)
       }
 
-      const ids = cells.map(c => c.id().toString())
+      const ids = cells.map(c =>
+        ({ gte: c.id().toString(), lt: c.id().next().toString() }))
 
       if (callback) return callback(null, ids)
       resolve(ids)

@@ -54,7 +54,9 @@ converted to one. **Returns** a `String` that is the index for this feature.
 - `radius` Number: the radius in **meters**, which the indexes should cover.
 
 **Returns** a `Promise` or calls a `callback` if specified with the result
-`Array` of indexes.
+`Array` of index pairs. A pair is an object with a `gte`, and `lt` value, which
+means the indexes in that area ara *greater than or equal to* `gte` and *lower
+than* `lt`.
 
 ## test
 
