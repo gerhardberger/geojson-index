@@ -1,9 +1,24 @@
 const s2 = require('s2')
 const normalize = require('geojson-normalize')
+
 const EARTH_RADIUS = 6371
 
 function radius2height (radius) {
   return 1 - Math.sqrt(1 - Math.pow((radius / EARTH_RADIUS), 2))
+}
+
+function getShape (geom, { radius }) {
+  if (geom.type === 'Point') {
+    const ll = new s2.S2LatLng(geom.coordinates[0], geom.coordinates[1])
+
+    return new s2.S2Cap(ll.normalized().toPoint(),
+      radius2height(radius / 1000))
+  }
+
+  // handle `Polygon`
+  const lls = geom.coordinates[0].map(
+    coord => (new s2.S2LatLng(coord[0], coord[1])).normalized().toPoint())
+  return [lls]
 }
 
 function index (data) {
@@ -11,10 +26,10 @@ function index (data) {
 
   if (!o || o.features.length === 0) return null
 
-  // for now, only use the first feature in a collection
+  // use the first feature in a collection
   const geom = o.features[0].geometry
 
-  // for now, only support `Point` features
+  // for indexing, only `Point` feature is supported
   if (geom.type !== 'Point') return null
 
   const ll = new s2.S2LatLng(geom.coordinates[0], geom.coordinates[1])
@@ -24,7 +39,6 @@ function index (data) {
 }
 
 function cover ({ data, radius = 1000 }, callback) {
-  // if (!(callback && typeof callback === 'function')) callback = () => {}
   const handler = (resolve, reject) => {
     const o = normalize(data)
 
@@ -35,21 +49,16 @@ function cover ({ data, radius = 1000 }, callback) {
       return reject(err)
     }
 
-    // for now, only use the first feature in a collection
+    // use only the first feature in a collection
     const geom = o.features[0].geometry
 
-    // for now, only support `Point` features
-    if (geom.type !== 'Point') {
-      const err = new Error('Only `Point` features supported')
+    if (geom.type !== 'Point' && geom.type !== 'Polygon') {
+      const err = new Error('Only `Point` or `Polygon` features are supported')
       if (callback) return callback(err)
       return reject(err)
     }
 
-    const ll = new s2.S2LatLng(geom.coordinates[0], geom.coordinates[1])
-    const cap = new s2.S2Cap(ll.normalized().toPoint(),
-      radius2height(radius / 1000))
-
-    s2.getCover(cap, (err, cells) => {
+    s2.getCover(getShape(geom, { radius }), (err, cells) => {
       if (err) {
         if (callback) return callback(err)
         return reject(err)
