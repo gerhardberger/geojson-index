@@ -55,6 +55,8 @@ be converted to one. **Returns** a `String` that is the index for this feature.
 - `data` Object: a proper GeoJSON object or GeoJSON feature that can be
   converted to one
 - `radius` Number: the radius in **meters**, which the indices should cover.
+- `min` Number: the minimum cell levels that should be used to cover.
+- `max` Number: the maximum cell levels that should be used to cover.
 
 **Returns** a `Promise` or calls a `callback` if specified with the result
 `Array` of index pairs. A pair is an object with a `gte`, and `lt` value, which
