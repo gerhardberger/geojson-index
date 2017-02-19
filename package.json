@@ -1,6 +1,6 @@
 {
   "name": "geojson-index",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "create indexes from geojson features and query them",
   "main": "index.js",
   "scripts": {
