@@ -1,5 +1,5 @@
-const s2 = require('s2')
-const normalize = require('geojson-normalize')
+const s2 = require('@mapbox/s2')
+const normalize = require('@mapbox/geojson-normalize')
 
 const EARTH_RADIUS = 6371
 
@@ -38,7 +38,7 @@ function index (data) {
   return id.toString()
 }
 
-function cover ({ data, radius = 1000 }, callback) {
+function cover ({ data, radius = 1000, min = 1, max = 30 }, callback) {
   const handler = (resolve, reject) => {
     const o = normalize(data)
 
@@ -58,7 +58,7 @@ function cover ({ data, radius = 1000 }, callback) {
       return reject(err)
     }
 
-    s2.getCover(getShape(geom, { radius }), (err, cells) => {
+    s2.getCover(getShape(geom, { radius }), { min, max }, (err, cells) => {
       if (err) {
         if (callback) return callback(err)
         return reject(err)

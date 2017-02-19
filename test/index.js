@@ -33,15 +33,15 @@ test.beforeEach(t => {
   }
 })
 
-test('create index', t => {
+test('index:success', t => {
   t.is(geo.index(t.context.pt.data), '4/001201113311013123011021000230')
 })
 
-test('create index wrong data format', t => {
+test('index:error', t => {
   t.is(geo.index({ foo: 'bar' }), null)
 })
 
-test.cb('query callback', t => {
+test.cb('cover:cirlce:callback', t => {
   geo.cover({
     data: t.context.pt.data,
     radius: 1940
@@ -60,7 +60,7 @@ test.cb('query callback', t => {
   })
 })
 
-test('query promise', t => {
+test('cover:cirlce:promise', t => {
   return geo.cover({
     data: t.context.pt.data,
     radius: 1940
@@ -76,7 +76,7 @@ test('query promise', t => {
   })
 })
 
-test.cb('query callback wrong data format', t => {
+test.cb('cover:circle:callback:error', t => {
   geo.cover({
     data: { foo: 'bar' },
     radius: 1940
@@ -88,7 +88,7 @@ test.cb('query callback wrong data format', t => {
   })
 })
 
-test('query promise wrong data format', t => {
+test('cover:circle:promise:error', t => {
   return geo.cover({
     data: { foo: 'bar' },
     radius: 1940
@@ -99,7 +99,7 @@ test('query promise wrong data format', t => {
   })
 })
 
-test('polygon cover promise', t => {
+test('cover:polygon:promise', t => {
   return geo.cover({
     data: t.context.poly.data
   }).then(ixs => {
@@ -111,7 +111,7 @@ test('polygon cover promise', t => {
   })
 })
 
-test.cb('polygon cover callback', t => {
+test.cb('cover:polygon:callback', t => {
   geo.cover({ data: t.context.poly.data }, (err, ixs) => {
     if (err) throw err
     t.deepEqual(ixs, [ { gte: '1/323301', lt: '1/323302' },
@@ -120,5 +120,22 @@ test.cb('polygon cover callback', t => {
       { gte: '1/3301011', lt: '1/3301012' },
       { gte: '1/330132', lt: '1/330133' } ])
     t.end()
+  })
+})
+
+test('cover:minmax', t => {
+  return geo.cover({
+    data: t.context.poly.data,
+    min: 5,
+    max: 5
+  }).then(ixs => {
+    t.deepEqual(ixs, [ { gte: '1/32330', lt: '1/32331' },
+      { gte: '1/32333', lt: '1/33000' },
+      { gte: '1/33000', lt: '1/33001' },
+      { gte: '1/33001', lt: '1/33002' },
+      { gte: '1/33002', lt: '1/33003' },
+      { gte: '1/33003', lt: '1/33010' },
+      { gte: '1/33010', lt: '1/33011' },
+      { gte: '1/33013', lt: '1/33020' } ])
   })
 })
