@@ -1,4 +1,4 @@
-const s2 = require('@mapbox/s2')
+const s2 = require('@gerhardberger/s2')
 const normalize = require('@mapbox/geojson-normalize')
 
 const EARTH_RADIUS = 6371
